@@ -23,7 +23,7 @@
                 const uploadForm = document.querySelector('form');
                 const uploadBtn = document.querySelector('input[type=button][value=Upload]');
                 uploadBtn.addEventListener('click', async event => {
-                    const token = await fetch('/api/token')
+                    const token = await fetch('/api/token').then(response => response.text())
                     const formData = new FormData();
                     const fileField = document.querySelector('input[type=file]');
                     formData.append('uploadedFile', fileField.files[0]);
