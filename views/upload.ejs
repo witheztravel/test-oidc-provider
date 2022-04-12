@@ -29,6 +29,7 @@
                     formData.append('uploadedFile', fileField.files[0]);
                     const result = await fetch(uploadForm.action, {
                         method: 'POST',
+                        mode: 'cors',
                         headers: {
                             'Authorization': `Bearer ${token}`,
                         },
