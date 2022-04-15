@@ -54,7 +54,7 @@ const configuration = {
         ctx.body = 'See terminal'
     },
 }
-const oidc = new Provider('http://abc.witheztravel.com', configuration)
+const oidc = new Provider('https://abc.witheztravel.com', configuration)
 
 app.use(mount('/', oidc.app))
 
@@ -80,7 +80,7 @@ apiRouter.get('/token', async (ctx, next) => {
         typ: 'JWT',
     })
     .setIssuedAt()
-    .setIssuer('http://abc.witheztravel.com')
+    .setIssuer('https://abc.witheztravel.com')
     .setSubject('CUS000123456')
     .setAudience('https://us-central1-sandbox-289103.cloudfunctions.net/function-1')
     .setExpirationTime('1 minute')
