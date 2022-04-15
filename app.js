@@ -12,6 +12,7 @@ import views from 'koa-views'
 const app = new Koa()
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
+app.proxy = true
 app.use(async (ctx, next) => {
     try {
         await next()
