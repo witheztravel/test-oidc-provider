@@ -10,7 +10,10 @@
     <h1>Hello world</h1>
     <form action="https://us-central1-sandbox-289103.cloudfunctions.net/function-1" method="post">
         <div>
-            <input type="file" name="" id="" accept="image/*">
+            <input type="file" name="file1" id="fileId1" accept="image/*">
+        </div>
+        <div>
+            <input type="file" name="file2" id="fileId2" accept="image/*">
         </div>
         <div>
             <input type="button" value="Upload">
@@ -25,8 +28,10 @@
                 uploadBtn.addEventListener('click', async event => {
                     const token = await fetch('/api/token').then(response => response.text())
                     const formData = new FormData();
-                    const fileField = document.querySelector('input[type=file]');
-                    formData.append('uploadedFile', fileField.files[0]);
+                    const fileFields = document.querySelectorAll('input[type=file]');
+                    for (const file of fileFields) {
+                        formData.append(file.id, file.files[0]);
+                    }
                     const result = await fetch(uploadForm.action, {
                         method: 'POST',
                         mode: 'cors',
@@ -35,8 +40,9 @@
                         },
                         body: formData,
                     })
-                    .then(response => response.json());
-                    // TODO result should contain gcs filename
+                    .catch(console.error)
+                    .then(response => response.json())
+                    .then(console.log);
                 });
             });
         })(window, document);
