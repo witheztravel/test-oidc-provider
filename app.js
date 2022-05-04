@@ -3,6 +3,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 
 import * as jose from 'jose'
+import cors from '@koa/cors'
 import Koa from 'koa'
 import mount from 'koa-mount'
 import Provider from 'oidc-provider'
@@ -10,6 +11,9 @@ import Router from '@koa/router'
 import views from 'koa-views'
 
 const app = new Koa()
+app.use(cors({
+    origin: '*',
+}))
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
 app.proxy = true
