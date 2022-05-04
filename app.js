@@ -75,7 +75,11 @@ app.use(mount('/', viewsRouter.routes()))
 
 const apiRouter = new Router()
 apiRouter.get('/token', async (ctx, next) => {
-    const jwt = await new jose.SignJWT({})
+    const today = new Date()
+    today.setDate(today.getDate() + 1)
+    const jwt = await new jose.SignJWT({
+        fileExpTime: today.toISOString(),
+    })
     .setProtectedHeader({
         alg: 'RS256',
         typ: 'JWT',
@@ -84,7 +88,7 @@ apiRouter.get('/token', async (ctx, next) => {
     .setIssuer('https://abc.witheztravel.com')
     .setSubject('CUS000123456')
     .setAudience('https://us-central1-sandbox-289103.cloudfunctions.net/function-1')
-    .setExpirationTime('1 minute')
+    .setExpirationTime('10 seconds')
     .sign(privateJWKObj)
     ctx.body = jwt
 })
