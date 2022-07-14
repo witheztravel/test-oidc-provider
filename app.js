@@ -7,6 +7,7 @@ import cors from '@koa/cors'
 import Koa from 'koa'
 import mount from 'koa-mount'
 import Provider from 'oidc-provider'
+import proxy from 'koa-better-http-proxy'
 import Router from '@koa/router'
 import views from 'koa-views'
 
@@ -96,6 +97,22 @@ apiRouter.get('/token', async (ctx, next) => {
     .sign(privateJWKObj)
     ctx.body = jwt
 })
+
+// upload 這支是用來 proxy http request 的，它會把 request 導到
+// https://asia-east1-universe-229003.cloudfunctions.net/function-1 並把 header 中
+// 的 origin 改成 https://test.eztravel.com.tw
+apiRouter.post('/upload', proxy('asia-east1-universe-229003.cloudfunctions.net', {
+    port: 443,
+    https: true,
+    proxyReqPathResolver: ctx => '/function-1',
+    connectTimeout: 2000,
+    timeout: 2000,
+    preserveHostHdr: false,
+    proxyReqOptDecorator: (proxyReqOpts, ctx) => {
+        proxyReqOpts.headers['origin'] = 'https://test.eztravel.com.tw'
+        return proxyReqOpts
+    },
+}))
 
 app.use(mount('/api', apiRouter.routes()))
 
